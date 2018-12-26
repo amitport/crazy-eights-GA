@@ -1,0 +1,8 @@
+<div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="10px">
+  <div class="discard-pile">
+    <div class="card" fxFill *ngIf="face" [ngClass]="{'card-red' : face.color === 'red'}" fxLayout fxLayoutAlign="center center">
+      <span style="font-size: 1.3em">{{face.rank.id}}</span><span style="font-size: 1.5em">{{face.suit.id}}</span>
+    </div>
+  </div>
+  <div>Discard [size {{size}}]</div>
+</div>

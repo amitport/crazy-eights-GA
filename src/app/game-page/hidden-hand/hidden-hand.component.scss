@@ -1,0 +1,19 @@
+.card-back {
+  box-sizing: border-box;
+
+  width: 37.5px;
+  height: 52.5px;
+
+  border: 1px solid #443e25;
+  border-radius: 3px;
+
+  box-shadow: 0 8px 6px -6px black;
+
+  font: normal 0.5px/normal Arial, Helvetica, sans-serif;
+  text-overflow: clip;
+  background: linear-gradient(-45deg, rgba(0,0,0,0) 25%, rgba(255,255,255,0.2) 25%, rgba(255,255,255,0.2) 50%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 75%, rgba(255,255,255,0.2) 75%), linear-gradient(45deg, rgba(0,0,0,0) 25%, rgba(255,255,255,0.2) 25%, rgba(255,255,255,0.2) 50%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 75%, rgba(255,255,255,0.2) 75%), rgb(0, 153, 151);
+  background-position: auto auto;
+  background-origin: padding-box;
+  background-clip: border-box;
+  background-size: 200em 200em;
+}

@@ -1,0 +1,8 @@
+<div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="10px" style="position: relative;">
+  <div class="stockpile" [ngClass]="{'stockpile-empty': size === 0}"></div>
+  <div *ngIf="size === 0" class="stockpile-text stockpile-empty"
+       fxLayout fxLayoutAlign="center center">
+    X
+  </div>
+  <div>Stock [size {{size}}]</div>
+</div>

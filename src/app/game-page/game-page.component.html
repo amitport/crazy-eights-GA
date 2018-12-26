@@ -1,0 +1,16 @@
+<div style="width: 100%; min-width: 500px; height: 700px; min-height: 700px;" fxLayout="column" fxLayoutAlign="space-between stretch">
+  <div>
+    game-page works! {{game | json}}
+  </div>
+
+  <app-hidden-hand [size]="15"></app-hidden-hand>
+
+  <div fxLayout fxLayoutAlign="space-around center">
+    <app-discard-pile topFid="1♥" [size]="12"></app-discard-pile>
+    <!--<app-stockpile [size]="0"></app-stockpile>-->
+    <app-stockpile [size]="11"></app-stockpile>
+  </div>
+
+  <app-hand [faceIds]="FACE_IDS"></app-hand>
+  <div>Your Hand</div>
+</div>

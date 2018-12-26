@@ -1,0 +1,19 @@
+.card {
+  box-sizing: border-box;
+
+  width: 37.5px;
+  height: 52.5px;
+
+  border: 1px solid #444444;
+  border-radius: 3px;
+
+  background-color: #fafafa;
+
+  font-weight: 900;
+
+  box-shadow: 0 8px 6px -6px black;
+
+  &.card-red {
+    color: #f44336;
+  }
+}
