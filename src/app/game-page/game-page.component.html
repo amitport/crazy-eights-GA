@@ -1,21 +1,23 @@
 <button (click)="start()">start</button>
-<div style="width: 100%; min-width: 500px; height: 700px; min-height: 700px;" fxLayout="column" fxLayoutAlign="space-between stretch">
-  <div>
-    <!--game-page works! {{game | json}}-->
-    <app-hand [cards]="game.opp"></app-hand>
-    <app-hand [cards]="game.stock"></app-hand>
+<div>
+  <app-hand [cards]="game.opp"></app-hand>
+  <div fxLayout fxLayoutAlign="center">
     <app-hand [cards]="game.discard"></app-hand>
-    <app-hand [cards]="game.player"></app-hand>
-
+    <app-hand [cards]="game.stock"></app-hand>
   </div>
+  <app-hand [cards]="game.player"></app-hand>
+</div>
 
-  <app-hidden-hand [size]="15"></app-hidden-hand>
+<hr>
+
+<div style="width: 100%; min-width: 500px; height: 700px; min-height: 700px;" fxLayout="column" fxLayoutAlign="space-between stretch">
+  <app-hidden-hand [size]="game.opp.length"></app-hidden-hand>
 
   <div fxLayout fxLayoutAlign="space-around center">
-    <app-discard-pile topFid="1♥" [size]="12"></app-discard-pile>
-    <app-stockpile [size]="11"></app-stockpile>
+    <app-discard-pile [topFid]="game.discard[0]?.id" [size]="game.discard.length"></app-discard-pile>
+    <app-stockpile [size]="game.stock.length"></app-stockpile>
   </div>
 
-  <app-hand [cards]="DECK"></app-hand>
+  <app-hand [cards]="game.player"></app-hand>
   <div>Your Hand</div>
 </div>
