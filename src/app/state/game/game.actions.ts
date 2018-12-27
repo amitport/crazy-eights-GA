@@ -1,11 +1,11 @@
 import { Action } from '@ngrx/store';
 
 export enum GameActionTypes {
-  LoadGames = '[Game] Load Games'
+  Start = '[Game] Load Games'
 }
 
-export class LoadGames implements Action {
-  readonly type = GameActionTypes.LoadGames;
+export class Start implements Action {
+  readonly type = GameActionTypes.Start;
 }
 
-export type GameActions = LoadGames;
+export type GameActions = Start;

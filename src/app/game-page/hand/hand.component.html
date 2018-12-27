@@ -1,5 +1,5 @@
 <div style="padding: 20px; border: 2px solid #b7b7b7; border-radius: 5px; background: antiquewhite;">
   <div fxLayout="row wrap" fxLayoutAlign="center" fxLayoutGap="10px grid">
-    <app-card *ngFor="let fid of faceIds" [fid]="fid"></app-card>
+    <app-card *ngFor="let card of cards" [fid]="card.id"></app-card>
   </div>
 </div>

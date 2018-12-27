@@ -6,7 +6,7 @@ import { GameActionTypes } from './game.actions';
 export class GameEffects {
 
   @Effect()
-  loadGames$ = this.actions$.pipe(ofType(GameActionTypes.LoadGames));
+  loadGames$ = this.actions$.pipe(ofType(GameActionTypes.Start));
 
   constructor(private actions$: Actions) {}
 }

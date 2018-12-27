@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Face, FaceId, FACES } from '../card/card.component';
+import { Face, FaceId, FACES } from '../../cards';
 
 @Component({
   selector: 'app-discard-pile',

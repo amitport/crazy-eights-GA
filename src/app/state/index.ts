@@ -7,7 +7,7 @@ import {
 } from '@ngrx/store';
 import { environment } from '../../environments/environment';
 import { storeFreeze } from 'ngrx-store-freeze';
-import { GameState } from './game/game.reducer';
+import { GameState, reducer } from './game/game.reducer';
 
 
 export interface State {
@@ -16,6 +16,6 @@ export interface State {
 
 export const gameFeatureSelector = createFeatureSelector<State, GameState>('game');
 
-export const reducers: ActionReducerMap<State> = {game: () => ({test: true})};
+export const reducers: ActionReducerMap<State> = {game: reducer};
 
 export const metaReducers: MetaReducer<State>[] = !environment.production ? [storeFreeze] : [];

@@ -4,7 +4,8 @@ import { GameState } from '../state/game/game.reducer';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { gameFeatureSelector, State } from '../state';
-import { FACE_IDS } from './card/card.component';
+import { DECK } from '../cards';
+import { Start } from '../state/game/game.actions';
 
 @Component({
   selector: 'app-game-page',
@@ -12,7 +13,7 @@ import { FACE_IDS } from './card/card.component';
   styleUrls: ['./game-page.component.css']
 })
 export class GamePageComponent implements OnDestroy {
-  FACE_IDS = FACE_IDS;
+  DECK = DECK;
   /** Subject that emits when the component has been destroyed. */
   private _destroyed = new Subject<void>();
 
@@ -22,6 +23,10 @@ export class GamePageComponent implements OnDestroy {
     store.pipe(select(gameFeatureSelector), takeUntil(this._destroyed)).subscribe((game) => {
       this.game = game;
     });
+  }
+
+  start() {
+    this.store.dispatch(new Start());
   }
 
   ngOnDestroy() {

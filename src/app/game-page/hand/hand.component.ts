@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FaceId } from '../card/card.component';
+import { Face } from '../../cards';
 
 @Component({
   selector: 'app-hand',
@@ -7,8 +7,7 @@ import { FaceId } from '../card/card.component';
   styleUrls: ['./hand.component.scss']
 })
 export class HandComponent implements OnInit {
-
-  @Input() faceIds: FaceId[];
+  @Input() cards: Face[];
 
   constructor() {
   }
