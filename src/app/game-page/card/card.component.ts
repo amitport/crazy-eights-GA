@@ -8,7 +8,8 @@ import { Face, FaceId, FACES } from '../../cards';
 })
 export class CardComponent implements OnInit {
 
-  face: Face;
+  face?: Face;
+  @Input() clickable?: boolean;
 
   @Input()
   set fid(fid: FaceId) {

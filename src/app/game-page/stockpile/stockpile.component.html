@@ -1,5 +1,5 @@
-<div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="10px" style="position: relative;">
-  <div class="stockpile" [ngClass]="{'stockpile-empty': size === 0}"></div>
+<div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="10px" style="position: relative;" (click)="isClickable() && draw()">
+  <div class="stockpile" [ngClass]="{'stockpile-empty': size === 0, 'stockpile-clickable': isClickable()}"></div>
   <div *ngIf="size === 0" class="stockpile-text stockpile-empty"
        fxLayout fxLayoutAlign="center center">
     X

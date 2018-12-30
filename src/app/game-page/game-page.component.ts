@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { gameFeatureSelector, State } from '../state';
 import { DECK } from '../cards';
-import { Start } from '../state/game/game.actions';
+import { Draw, Start } from '../state/game/game.actions';
 
 @Component({
   selector: 'app-game-page',
@@ -17,7 +17,7 @@ export class GamePageComponent implements OnDestroy {
   /** Subject that emits when the component has been destroyed. */
   private _destroyed = new Subject<void>();
 
-  game: GameState;
+  game?: GameState;
 
   constructor(private store: Store<State>) {
     store.pipe(select(gameFeatureSelector), takeUntil(this._destroyed)).subscribe((game) => {

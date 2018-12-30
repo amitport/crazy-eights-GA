@@ -1,18 +1,25 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Face } from '../../cards';
+import { Component, Input } from '@angular/core';
+import { Face, FaceId } from '../../cards';
+import { GameLogicService } from '../../game-logic.service';
 
 @Component({
   selector: 'app-hand',
   templateUrl: './hand.component.html',
   styleUrls: ['./hand.component.scss']
 })
-export class HandComponent implements OnInit {
-  @Input() cards: Face[];
+export class HandComponent {
+  @Input() cards?: Face[];
+  @Input() section?: string;
 
-  constructor() {
+  constructor(private logic: GameLogicService) {
   }
 
-  ngOnInit() {
+  isClickable(fid: FaceId) {
+    // noinspection TsLint
+    return this.logic.isClickable(this.section!, fid);
   }
 
+  discard(cardIdx: number) {
+    this.logic.discard(cardIdx);
+  }
 }

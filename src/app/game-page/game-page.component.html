@@ -1,23 +1,21 @@
 <button (click)="start()">start</button>
-<div>
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); grid-column-gap: 10px;">
+<div style="grid-column: span 1;" fxLayout="column" fxLayoutGap="10px">
   <app-hand [cards]="game.opp"></app-hand>
-  <div fxLayout fxLayoutAlign="center">
-    <app-hand [cards]="game.discard"></app-hand>
-    <app-hand [cards]="game.stock"></app-hand>
+  <div style="display: grid;	align-items: center; grid-template-columns: repeat(4, 1fr); grid-column-gap: 10px;">
+    <app-hand style="grid-column: 2 / span 1;" [cards]="game.discard"></app-hand>
+    <app-hand style="grid-column: 3 / span 1; max-height: 300px; overflow: auto;" [cards]="game.stock"></app-hand>
   </div>
   <app-hand [cards]="game.player"></app-hand>
 </div>
-
-<hr>
-
-<div style="width: 100%; min-width: 500px; height: 700px; min-height: 700px;" fxLayout="column" fxLayoutAlign="space-between stretch">
+<div style="grid-column: span 1;" fxLayout="column" fxLayoutGap="10px">
   <app-hidden-hand [size]="game.opp.length"></app-hidden-hand>
 
-  <div fxLayout fxLayoutAlign="space-around center">
-    <app-discard-pile [topFid]="game.discard[0]?.id" [size]="game.discard.length"></app-discard-pile>
-    <app-stockpile [size]="game.stock.length"></app-stockpile>
+  <div style="display: grid;	align-items: center; grid-template-columns: repeat(4, 1fr); grid-column-gap: 10px;">
+    <app-discard-pile style="grid-column: 2 / span 1;" [topFid]="game.discard.length !== 0 && game.discard[game.discard.length-1].id" [size]="game.discard.length"></app-discard-pile>
+    <app-stockpile style="grid-column: 3 / span 1;" [size]="game.stock.length"></app-stockpile>
   </div>
 
-  <app-hand [cards]="game.player"></app-hand>
-  <div>Your Hand</div>
+  <app-hand [cards]="game.player" section="player"></app-hand>
+</div>
 </div>

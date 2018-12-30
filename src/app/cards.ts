@@ -1,16 +1,16 @@
-const ACE = Object.freeze<{ id: 'A', name: 'ACE' }>({id: 'A', name: 'ACE'});
-const TWO = Object.freeze<{ id: '2', name: 'TWO' }>({id: '2', name: 'TWO'});
-const THREE = Object.freeze<{ id: '3', name: 'THREE' }>({id: '3', name: 'THREE'});
-const FOUR = Object.freeze<{ id: '4', name: 'FOUR' }>({id: '4', name: 'FOUR'});
-const FIVE = Object.freeze<{ id: '5', name: 'FIVE' }>({id: '5', name: 'FIVE'});
-const SIX = Object.freeze<{ id: '6', name: 'SIX' }>({id: '6', name: 'SIX'});
-const SEVEN = Object.freeze<{ id: '7', name: 'SEVEN' }>({id: '7', name: 'SEVEN'});
-const EIGHT = Object.freeze<{ id: '8', name: 'EIGHT' }>({id: '8', name: 'EIGHT'});
-const NINE = Object.freeze<{ id: '9', name: 'NINE' }>({id: '9', name: 'NINE'});
-const TEN = Object.freeze<{ id: 'T', name: 'TEN' }>({id: 'T', name: 'TEN'});
-const JACK = Object.freeze<{ id: 'J', name: 'JACK' }>({id: 'J', name: 'JACK'});
-const QUEEN = Object.freeze<{ id: 'Q', name: 'QUEEN' }>({id: 'Q', name: 'QUEEN'});
-const KING = Object.freeze<{ id: 'K', name: 'KING' }>({id: 'K', name: 'KING'});
+export const ACE = Object.freeze<{ id: 'A', name: 'ACE' }>({id: 'A', name: 'ACE'});
+export const TWO = Object.freeze<{ id: '2', name: 'TWO' }>({id: '2', name: 'TWO'});
+export const THREE = Object.freeze<{ id: '3', name: 'THREE' }>({id: '3', name: 'THREE'});
+export const FOUR = Object.freeze<{ id: '4', name: 'FOUR' }>({id: '4', name: 'FOUR'});
+export const FIVE = Object.freeze<{ id: '5', name: 'FIVE' }>({id: '5', name: 'FIVE'});
+export const SIX = Object.freeze<{ id: '6', name: 'SIX' }>({id: '6', name: 'SIX'});
+export const SEVEN = Object.freeze<{ id: '7', name: 'SEVEN' }>({id: '7', name: 'SEVEN'});
+export const EIGHT = Object.freeze<{ id: '8', name: 'EIGHT' }>({id: '8', name: 'EIGHT'});
+export const NINE = Object.freeze<{ id: '9', name: 'NINE' }>({id: '9', name: 'NINE'});
+export const TEN = Object.freeze<{ id: 'T', name: 'TEN' }>({id: 'T', name: 'TEN'});
+export const JACK = Object.freeze<{ id: 'J', name: 'JACK' }>({id: 'J', name: 'JACK'});
+export const QUEEN = Object.freeze<{ id: 'Q', name: 'QUEEN' }>({id: 'Q', name: 'QUEEN'});
+export const KING = Object.freeze<{ id: 'K', name: 'KING' }>({id: 'K', name: 'KING'});
 
 type Rank =
   typeof ACE | typeof TWO | typeof THREE | typeof FOUR | typeof FIVE | typeof SIX | typeof SEVEN |
@@ -226,3 +226,5 @@ export const FACES = Object.freeze({
 
 export const DECK = Object.freeze(Object.values(FACES));
 export const FACE_IDS = Object.freeze(Object.keys(FACES) as FaceId[]);
+
+

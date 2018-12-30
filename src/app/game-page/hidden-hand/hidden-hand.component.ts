@@ -9,7 +9,7 @@ import { times } from '../../utils';
 export class HiddenHandComponent implements OnInit {
   times = times;
 
-  @Input() size: number;
+  @Input() size?: number;
 
   constructor() {
   }

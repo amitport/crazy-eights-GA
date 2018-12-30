@@ -16,4 +16,9 @@
   &.card-red {
     color: #f44336;
   }
+
+  &.card-clickable {
+    box-shadow: 0 0 3px 2px red, 0 8px 6px -6px black;
+  }
+
 }

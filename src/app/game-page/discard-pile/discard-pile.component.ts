@@ -9,7 +9,7 @@ import { Face, FaceId, FACES } from '../../cards';
 export class DiscardPileComponent implements OnInit {
   @Input() size = 0;
 
-  face: Face;
+  face?: Face;
 
   @Input()
   set topFid(fid: FaceId) {

@@ -1,10 +1,4 @@
-import {
-  ActionReducer,
-  ActionReducerMap,
-  createFeatureSelector,
-  createSelector,
-  MetaReducer
-} from '@ngrx/store';
+import { ActionReducerMap, createFeatureSelector, MetaReducer } from '@ngrx/store';
 import { environment } from '../../environments/environment';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { GameState, reducer } from './game/game.reducer';

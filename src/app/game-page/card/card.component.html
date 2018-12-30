@@ -1,3 +1,4 @@
-<div class="card" [ngClass]="{'card-red' : face.color === 'red'}" fxLayout fxLayoutAlign="center center">
+<div class="card" [ngClass]="{'card-red' : face.color === 'red', 'card-clickable': clickable}" fxLayout
+     fxLayoutAlign="center center">
   <span style="font-size: 1.3em">{{face.rank.id}}</span><span style="font-size: 1.5em">{{face.suit.id}}</span>
 </div>

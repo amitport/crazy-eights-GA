@@ -16,6 +16,10 @@
     background-origin: padding-box;
     background-clip: border-box;
     background-size: 200em 200em;
+
+    &.stockpile-clickable {
+      box-shadow: 0 0 3px 2px red, 0 8px 6px -6px black;
+    }
   }
   &.stockpile-empty {
     background: #828282;

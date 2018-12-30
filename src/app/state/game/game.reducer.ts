@@ -30,6 +30,22 @@ export function reducer(state = initialState, action: GameActions): GameState {
       return {
         player, opp, discard, stock
       };
+    case GameActionTypes.Discard:
+      const cardToDiscard = state.player[action.cardIdx];
+
+      return {
+        ...state,
+        discard: [...state.discard, cardToDiscard],
+        player: [...state.player.slice(0, action.cardIdx), ...state.player.slice(action.cardIdx + 1)],
+      };
+    case GameActionTypes.Draw:
+      const drawnCard = state.stock[state.stock.length - 1];
+
+      return {
+        ...state,
+        stock: state.stock.slice(0, state.stock.length - 1),
+        player: [...state.player, drawnCard],
+      };
     default:
       return state;
   }
