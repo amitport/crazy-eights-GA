@@ -1,3 +1,12 @@
+<div><button (click)="randomTree()">randomTree</button> {{randomTreeRes}}</div>
+<div><button (click)="randomDeal()">randomDeal</button>
+  <app-discard-pile [topFid]="randomDiscardRes[0]?.id" [size]="randomDiscardRes.length"></app-discard-pile>
+  <app-hand [cards]="randomHandRes" [markedForPlay]="evaluate"></app-hand>
+</div>
+
+<!--<div><button (click)="evaluate()">evaluate</button>{{evaluateRes | json}}</div>-->
+
+
 <button (click)="start()">start</button>
 <div style="display: grid; grid-template-columns: repeat(2, 1fr); grid-column-gap: 10px;">
 <div style="grid-column: span 1;" fxLayout="column" fxLayoutGap="10px">

@@ -11,6 +11,8 @@ export class HandComponent {
   @Input() cards?: Face[];
   @Input() section?: string;
 
+  @Input() markedForPlay: (face: Face) => boolean = () => false;
+
   constructor(private logic: GameLogicService) {
   }
 
