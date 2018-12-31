@@ -17,7 +17,7 @@ abstract class Op {
   ['constructor']: typeof Op;
 }
 
-class UnaryOp extends Op {
+export  class UnaryOp extends Op {
   constructor(public expr: Expression) {
     super();
   }
@@ -130,7 +130,7 @@ class Literal extends Terminal {
   }
 }
 
-class Constant extends Terminal {
+export class Constant extends Terminal {
   constructor(public value: any) {
     super();
   }
@@ -161,13 +161,15 @@ class Variable extends Terminal {
 const UNARY_OPS = [IsEmptyOp, NotOp, RankOp, SuitOp, ColorOp];
 const BINARY_OPS = [/*AndOp, */OrOp, EqOp, NotEqOp];
 const VARIABLES = [new Variable('discardPile'), new Variable('cardToPlay')];
-const TERMINALS = [
+const CONSTANTS = [
+  ...Object.values(RANKS).map((_) => new Constant(_)),
+  ...Object.values(SUITS).map((_) => new Constant(_)),
+];
+export const TERMINALS = [
   new Literal(true), new Literal(false),
 
   ...VARIABLES,
-
-  ...Object.values(RANKS).map((_) => new Constant(_)),
-  ...Object.values(SUITS).map((_) => new Constant(_)),
+  ...CONSTANTS,
 ];
 
 export function randomTree(depth = 0, avoidConstantsAndLiterals = false): Expression {

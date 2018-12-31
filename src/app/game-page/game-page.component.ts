@@ -9,6 +9,7 @@ import { Draw, Start } from '../state/game/game.actions';
 import { randomTree, Expression } from '../ast/tree';
 import { chooseOne, shuffle } from '../utils';
 
+import '../genetic-programming';
 
 @Component({
   selector: 'app-game-page',
