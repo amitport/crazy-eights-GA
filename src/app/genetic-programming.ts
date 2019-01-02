@@ -9,10 +9,6 @@ genetic.select2 = Genetic.Select2.Tournament2;
 
 genetic.seed = randomTree;
 
-function stripUnary(entity: UnaryOp) {
-  return entity.expr;
-}
-
 function mutate(entity) {
   if (entity.type === 'UnaryOp' && Math.random() < 0.1) {
     return entity.expr;
