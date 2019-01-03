@@ -1,0 +1,14 @@
+pitfall :
+
+generation 1000
+
+((EIGHT == cardToPlay.rank) != (((cardToPlay.suit == discardPile.suit) and discardPile) or isEmpty(((discardPile.rank == cardToPlay.rank) or discardPile).suit)))
+!((((discardPile.rank != cardToPlay.rank) and (discardPile.suit != cardToPlay.suit)) and discardPile.suit))
+
+score (for 999/1000)
+
+
+Generation 545 (with population 1000)
+stats.maximum 1
+maximum tree size 112
+Best entity (size = 20): !((((discardPile.rank != cardToPlay.rank) and ((EIGHT != cardToPlay.rank) and (discardPile.suit != cardToPlay.suit))) and discardPile.color)

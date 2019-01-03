@@ -1,3 +1,6 @@
+import {chooseOne} from "./utils";
+import {TERMINALS} from "./ast-tree";
+
 export class Tree {
   public parent?: Tree;
   public size = 1;
@@ -39,16 +42,24 @@ export function crossover(parent1: Tree, parent2: Tree) {
   return switchSubTrees(chooseRandomSubtree(parent1.clone()), chooseRandomSubtree(parent2.clone()));
 }
 
-function replaceBranch(oldParent: any, oldBranch: any, newBranch: any) {
+export function replaceBranch(oldParent: any, oldBranch: any, newBranch: any) {
+  let sizeDelta;
   newBranch.parent = oldParent;
 
-  if (oldParent) {
-    // replace the children of the old parent
-    oldParent.children.splice(oldParent.children.indexOf(oldBranch), 1, newBranch);
-  }
+  if (newBranch.size >= 100 && oldParent) {
+    // just prune when other branch is too big
+    oldParent.children.splice(oldParent.children.indexOf(oldBranch), 1, chooseOne(TERMINALS));
 
-  // propagate size change and find root;
-  const sizeDelta = newBranch.size - oldBranch.size;
+    sizeDelta = 1 - oldBranch.size;
+  } else {
+
+    if (oldParent) {
+      // replace the children of the old parent
+      oldParent.children.splice(oldParent.children.indexOf(oldBranch), 1, newBranch);
+    }
+    sizeDelta = newBranch.size - oldBranch.size;
+    // propagate size change and find root;
+  }
   let newRoot = newBranch;
   while (newRoot.parent) {
     newRoot = newRoot.parent;
@@ -57,7 +68,7 @@ function replaceBranch(oldParent: any, oldBranch: any, newBranch: any) {
   return newRoot;
 }
 
-function switchSubTrees(tree1: Tree, tree2: Tree) {
+export function switchSubTrees(tree1: Tree, tree2: Tree) {
   const parent1 = tree1.parent;
   const parent2 = tree2.parent;
 

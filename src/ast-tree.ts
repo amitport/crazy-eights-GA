@@ -7,14 +7,15 @@ export abstract class Expression extends Tree {
   abstract evaluate(env: {[key: string]: any}): any;
 }
 
-abstract class Op extends Tree {
+abstract class Op extends Expression {
   protected static opName: string;
   ['constructor']: typeof Op;
 }
 
-export  class UnaryOp extends Op {
+export abstract class UnaryOp extends Op {
   get expr() {return this.children[0] as Expression;}
 
+  // noinspection TypeScriptAbstractClassConstructorCanBeMadeProtected
   constructor(expr: Expression) {
     super(new.target, [expr]);
   }
@@ -48,7 +49,10 @@ class IsEmptyOp extends UnaryOp {
   static readonly opName = 'isEmpty';
 
   evaluate(env: {[key: string]: any}) {
-    return this.expr.evaluate(env).length === 0;
+    const listOpt = this.expr.evaluate(env);
+    if (listOpt) {
+      return this.expr.evaluate(env).length === 0;
+    }
   }
 }
 
@@ -56,7 +60,10 @@ abstract class PropertyOp extends UnaryOp {
   static readonly type = 'PropertyOp';
 
   evaluate(env: {[key: string]: any}) {
-    return this.expr.evaluate(env)[this.constructor.opName];
+    const targetOpt = this.expr.evaluate(env);
+    if (targetOpt) {
+      return targetOpt[this.constructor.opName];
+    }
   }
 
   toString() {
@@ -77,12 +84,13 @@ class ColorOp extends PropertyOp {
 }
 
 
-class BinaryOp extends Op {
+export abstract class BinaryOp extends Op {
   static readonly type = 'BinaryOp';
 
   get expr1() {return this.children[0] as Expression;}
   get expr2() {return this.children[1] as Expression;}
 
+  // noinspection TypeScriptAbstractClassConstructorCanBeMadeProtected
   constructor(expr1: Expression, expr2: Expression) {
     super(new.target, [expr1, expr2]);
   }
@@ -100,7 +108,7 @@ class AndOp extends BinaryOp {
   static readonly opName = 'and';
 
   evaluate(env: {[key: string]: any}) {
-    return this.expr1.evaluate(env) && this.expr2.evaluate(env);
+    return !!(this.expr1.evaluate(env) && this.expr2.evaluate(env));
   }
 }
 
@@ -108,7 +116,7 @@ class OrOp extends BinaryOp {
   static readonly opName = 'or';
 
   evaluate(env: {[key: string]: any}) {
-    return this.expr1.evaluate(env) || this.expr2.evaluate(env);
+    return !!(this.expr1.evaluate(env) || this.expr2.evaluate(env));
   }
 }
 
@@ -194,7 +202,7 @@ class Variable extends Terminal {
 }
 
 const UNARY_OPS = [IsEmptyOp, NotOp, RankOp, SuitOp, ColorOp];
-const BINARY_OPS = [/*AndOp, */OrOp, EqOp, NotEqOp];
+export const BINARY_OPS: typeof BinaryOp[] = [AndOp, OrOp, EqOp, NotEqOp];
 const VARIABLES = [new Variable('discardPile'), new Variable('cardToPlay')];
 const CONSTANTS = [
   ...RANKS.map((_) => new Constant(_)),
@@ -221,7 +229,7 @@ export function randomTree(depth = 0): Expression {
   // );
 
   // random tree below:
-  if (Math.random() < 0.01 * (1 + depth / 5000)) {
+  if (Math.random() < 0.08 * (1 + depth / 5000)) {
     return chooseOne(TERMINALS);
   } else {
     const node = chooseOne([...UNARY_OPS, ...BINARY_OPS]);
@@ -236,7 +244,7 @@ export function randomTree(depth = 0): Expression {
       return new node(chooseOne(VARIABLES));
     }
     if (node.type === 'BinaryOp') {
-      return new node(randomTree(nextDepth), randomTree(nextDepth));
+      return new (node as any)(randomTree(nextDepth), randomTree(nextDepth));
     }
   }
 }
