@@ -108,7 +108,7 @@ function mutate(entity) {
     }
   }
 
-  const newBranch = randomTree(10 /* give more chance to terminals */);
+  const newBranch = randomTree(40 /* give more chance to terminals */);
 
   const parent = oldBranch.parent;
   newBranch.parent = parent;
@@ -143,18 +143,25 @@ function evolve() {
         let score = 0;
 
         for (let sample of this.userData.samples) {
-          score += (entity.evaluate({cardToPlay: sample.cardToPlay, discardPile: sample.discardPile}) === sample.playable) ? 1 : 0;
+          const res = entity.evaluate({cardToPlay: sample.cardToPlay, discardPile: sample.discardPile});
+          if (typeof res === 'boolean') {
+            // (only score boolean results)
+            score += sample.playable === res ? 1 : -1;
+          }
         }
-        if (score / this.userData.samples.length < 0.5) {
-          // todo maybe sigmoid?
-          score = 0.5 * this.userData.samples.length; // don't give negative predicate a score that is too low
-        }
-        score -= (entity.size) * 0.5;
+
         score /= this.userData.samples.length;
+        if (score < 0) {
+          score = (-score) - 0.05 // fine for being in the opposite direction (can easily be reversed with NotOp
+        }
+        score -= entity.size * 0.0001; // fine for being too big
+        if (score > 1) {
+          debugger;
+        }
         return score;
       },
       generation(pop, generation, stats) {
-        return pop[0].fitness !== 1;
+        return true;
       },
       notification(pop, generation, stats, isDone) {
         const value = pop[0].entity;
@@ -168,10 +175,10 @@ function evolve() {
   );
   genetic.evolve({
     iterations: 100000,
-    size: 1000,
+    size: 800,
     crossover: 0.3,
     mutation: 0.5,
-    skip: 20 /* frequency for notifications */
+    skip: 50 /* frequency for notifications */
   }, {
     samples: Array.from(genSamples(1000)),
   });

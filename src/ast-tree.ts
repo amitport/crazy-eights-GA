@@ -7,7 +7,7 @@ export abstract class Expression extends Tree {
   abstract evaluate(env: {[key: string]: any}): any;
 }
 
-abstract class Op extends Expression {
+export abstract class Op extends Expression {
   protected static opName: string;
   ['constructor']: typeof Op;
 }
@@ -136,11 +136,11 @@ class NotEqOp extends BinaryOp {
   }
 }
 
-abstract class Terminal extends Expression {
+export abstract class Terminal extends Expression {
   readonly type = 'Terminal';
 }
 
-class Literal extends Terminal {
+export class Literal extends Terminal {
 
   get value() {return this.content;}
 
@@ -181,7 +181,7 @@ export class Constant extends Terminal {
   }
 }
 
-class Variable extends Terminal {
+export class Variable extends Terminal {
   get key() {return this.content;}
 
   constructor(key: any) {
@@ -229,21 +229,14 @@ export function randomTree(depth = 0): Expression {
   // );
 
   // random tree below:
-  if (Math.random() < 0.08 * (1 + depth / 5000)) {
+  if (Math.random() < 0.08 * (1 + depth / 10)) {
     return chooseOne(TERMINALS);
   } else {
     const node = chooseOne([...UNARY_OPS, ...BINARY_OPS]);
     const nextDepth = depth + 1;
-    if (node.type === 'UnaryOp') {
-      if (node.opName === 'isEmpty') {
-        return new node(VARIABLES[0]);
-      }
-      return new node(randomTree(nextDepth));
-    }
-    if (node.type === 'PropertyOp') {
-      return new node(chooseOne(VARIABLES));
-    }
-    if (node.type === 'BinaryOp') {
+    if (UNARY_OPS.includes(node as any)) {
+      return new (node as any)(randomTree(nextDepth));
+    } else {
       return new (node as any)(randomTree(nextDepth), randomTree(nextDepth));
     }
   }

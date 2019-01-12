@@ -12,3 +12,23 @@ Generation 545 (with population 1000)
 stats.maximum 1
 maximum tree size 112
 Best entity (size = 20): !((((discardPile.rank != cardToPlay.rank) and ((EIGHT != cardToPlay.rank) and (discardPile.suit != cardToPlay.suit))) and discardPile.color)
+
+prioritize VARIABLES? in properties and in isEmpty? (no influence)
+
+get's there be generation 500 (after giving negatives a weight)
+
+
+###
+Generation 620
+stats.maximum 0.9905
+maximum tree size 43
+Best entity (size = 19): ((EIGHT == cardToPlay.rank) or ((discardPile.rank == cardToPlay.rank) or (isEmpty(discardPile) or (discardPile.suit == cardToPlay.suit))))
+###
+
+annoying false: ((isEmpty(QUEEN) == (EIGHT != cardToPlay.rank)) or ((isEmpty(discardPile) == (discardPile.rank != cardToPlay.rank)) or (discardPile.suit == cardToPlay.suit)))
+annoying false: ((false == (EIGHT != cardToPlay.rank)) or ((isEmpty(discardPile) == (discardPile.rank != cardToPlay.rank)) or (discardPile.suit == cardToPlay.suit)))
+
+
+CNF simplify_logic infer from generalization specialization mutations
+reward distance to simple standard form
+
