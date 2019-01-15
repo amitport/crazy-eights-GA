@@ -155,16 +155,16 @@ const COMPARISONS = [EqOp, NotEqOp];
 
 export function randomClause(): Expression {
     if (Math.random() < 0.01) {
-        const v = chooseOne(VARIABLES);
-        return new (chooseOne(PREDICATES))([v]);
+        const v = chooseOne(VARIABLES)!;
+        return new (chooseOne(PREDICATES)!)([v]);
     } else { // if (Op.arity === 2)
         const SOp1 = Math.random() < 0.9 ? chooseOne([...ACCESSORS]) : null;
         const SOp2 = Math.random() < 0.9 ? chooseOne([...PREDICATES, ...ACCESSORS]) : null;
 
-        const v1 = SOp1 != null ? new SOp1([chooseOne(VARIABLES)]) : chooseOne(VARIABLES);
-        const v2 = SOp2 != null ? new SOp2([chooseOne([...VARIABLES, ...LITERALS])]) : chooseOne([...VARIABLES, ...LITERALS]);
+        const v1 = SOp1 != null ? new SOp1([chooseOne(VARIABLES)!]) : chooseOne(VARIABLES)!;
+        const v2 = SOp2 != null ? new SOp2([chooseOne([...VARIABLES, ...LITERALS])!]) : chooseOne([...VARIABLES, ...LITERALS])!;
 
-        return new (chooseOne(COMPARISONS))([v1, v2]);
+        return new (chooseOne(COMPARISONS)!)([v1, v2]);
     }
 }
 

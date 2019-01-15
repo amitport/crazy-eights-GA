@@ -86,7 +86,7 @@ export function growOrSplitLeaf(bexpr: Expression) {
 
     bexpr = bexpr.clone();
     const subTree = chooseRandomSubtree(bexpr);
-    const Op = chooseOne(BOOLEAN_OPS);
+    const Op = chooseOne(BOOLEAN_OPS)!;
 
     let newBranch;
     let parent: Expression | undefined = subTree.parent;
@@ -128,7 +128,7 @@ export function pruneBranchOrDeleteLeaf(bexpr: Expression) {
 
     bexpr = bexpr.clone();
     const branch = chooseBranch(bexpr);
-    const child = chooseOne(branch.children);
+    const child = chooseOne(branch.children)!;
 
     if (branch.parent) {
         const idx = branch.parent.children.indexOf(branch);
@@ -152,11 +152,11 @@ export function pruneBranchOrDeleteLeaf(bexpr: Expression) {
 export function mutate(bexpr: Expression) {
     return chooseOne([
         alternateLeaf,
-        // alternateOperator,
-        // growOrSplitLeaf,
-        // pruneBranchOrDeleteLeaf
+        alternateOperator,
+        growOrSplitLeaf,
+        pruneBranchOrDeleteLeaf
         ]
-    )(bexpr);
+    )!(bexpr);
 }
 
 export function replaceBranch(oldParent: any, oldBranch: any, newBranch: any) {

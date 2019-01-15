@@ -8,6 +8,6 @@
   },
   "dependencies": {
     "ascii-histogram": "^1.2.1",
-    "genetic-js-no-ww": "^0.2.1"
+    "genetic-js-no-ww": "github:amitport/genetic-js-no-ww"
   }
 }

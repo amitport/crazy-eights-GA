@@ -49,7 +49,7 @@ export function randomBooleanExpression(depth = 0): Expression {
         // clauses are literals as far as the boolean expression is concerned
         return new Literal(randomClause());
     } else {
-        const Op = chooseOne(BOOLEAN_OPS);
+        const Op = chooseOne(BOOLEAN_OPS)!;
         const nextDepth = depth + 1;
         if (Op.arity === 1) {
             return new Op([randomBooleanExpression(nextDepth)]);

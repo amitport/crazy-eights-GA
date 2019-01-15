@@ -7,12 +7,12 @@ import {best, randomBooleanExpression} from "./boolean-expression";
 import {Expression} from "./expression";
 
 function randomSample() {
-    const cardToPlay = chooseOne(CARDS);
+    const cardToPlay = chooseOne(CARDS)!;
     const discardPile = new DiscardPile();
 
     if (Math.random() < 0.98) {
         // usually we would want a none empty discard pile
-        discardPile.push(chooseOne(CARDS))
+        discardPile.push(chooseOne(CARDS)!)
     }
 
     const playable = discardPile.length === 0 || cardToPlay.rank === EIGHT ||
