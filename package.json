@@ -5,5 +5,9 @@
     "@types/node": "^10.12.18",
     "ts-node": "^7.0.1",
     "typescript": "^3.2.2"
+  },
+  "dependencies": {
+    "ascii-histogram": "^1.2.1",
+    "genetic-js-no-ww": "^0.2.1"
   }
 }

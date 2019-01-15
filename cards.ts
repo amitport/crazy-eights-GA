@@ -198,3 +198,23 @@ export const CARDS = Object.freeze([
     SIX_OF_SPADES, SEVEN_OF_SPADES, EIGHT_OF_SPADES, NINE_OF_SPADES, TEN_OF_SPADES,
     JACK_OF_SPADES, QUEEN_OF_SPADES, KING_OF_SPADES,
 ]);
+
+export class DiscardPile extends Array {
+    get rank() {
+        if (this.length === 1) {
+            return this[0].rank;
+        }
+    }
+
+    get suit() {
+        if (this.length === 1) {
+            return this[0].suit;
+        }
+    }
+
+    get color() {
+        if (this.length === 1) {
+            return this[0].color
+        }
+    }
+}
