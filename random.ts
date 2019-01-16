@@ -34,8 +34,8 @@ export function randomClause(): Expression {
 }
 
 function chooseTerminal(depth: number) {
-    // return Math.random() < 0.08 * (1 + depth / 5000);
-    return Math.random() < 0.15 * (1 + depth / 10);
+    return Math.random() < 0.08 * (1 + depth / 5000);
+    // return Math.random() < 0.15 * (1 + depth / 10);
 }
 
 export function getRandomTerminal() {
@@ -45,14 +45,14 @@ export function getRandomTerminal() {
 }
 
 function randomExpressionRec(depth: number) {
-    // const Op = chooseOne([...UNARY_OPS,  ...BINARY_OPS])!;
-    const Op = chooseOne(BOOLEAN_OPS)!;
+    const Op = chooseOne([...UNARY_OPS,  ...BINARY_OPS])!;
+    // const Op = chooseOne(BOOLEAN_OPS)!;
     const nextDepth = depth + 1;
 
     if (Op.arity === 1) {
-        // if (Op !== NotOp) {
-        //     return new Op([chooseOne(VARIABLES)!]);
-        // }
+        if (Op !== NotOp) {
+            return new Op([chooseOne(VARIABLES)!]);
+        }
         return new Op([getRandomExpression(nextDepth)]);
     } else { // if (Op.arity === 2)
         return new Op([getRandomExpression(nextDepth), getRandomExpression(nextDepth)]);
@@ -61,7 +61,7 @@ function randomExpressionRec(depth: number) {
 
 export function getRandomExpression(depth = 0): Expression {
     if (chooseTerminal(depth)) {
-        return randomClause(); //return getRandomTerminal();
+        return getRandomTerminal();
     } else {
         return randomExpressionRec(depth);
     }

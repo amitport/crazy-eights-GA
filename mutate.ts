@@ -1,8 +1,8 @@
 import {BinaryOp, Expression, Terminal, UnaryOp} from "./expression";
 import {Literal} from "./clause";
 import {chooseOne, getRandomExpression, getRandomTerminal} from "./random";
-import {ACCESSORS, BINARY_OPS, COMPARISONS, PREDICATES, UNARY_OPS} from "./node-types";
-import {AndOp, NotOp, OrOp} from "./boolean-expression";
+import {BINARY_OPS, UNARY_OPS} from "./node-types";
+import {AndOp, OrOp} from "./boolean-expression";
 
 export function alternateLeaf(expr: Expression) {
     if (expr instanceof Terminal) {
@@ -21,7 +21,7 @@ export function alternateLeaf(expr: Expression) {
     return expr;
 }
 
-export function alternateOperator(expr: Expression): Expression {
+export function alternateOperator(expr: Expression) {
     if (expr instanceof Terminal) {
         return expr;
     }
@@ -29,19 +29,12 @@ export function alternateOperator(expr: Expression): Expression {
 
     const oldBranch = expr.findRandomBranchDescendant();
 
-    let Op: typeof Expression;
-    if (oldBranch instanceof AndOp) {
-        Op = OrOp;
-    } else if (oldBranch instanceof OrOp) {
-        Op = AndOp;
-    } else if (oldBranch instanceof NotOp) {
-        // got nothing to replace
-        return mutate2(expr);
-    } else { // ACCESSORS and PREDICATES
-        const opTypes: (typeof Expression)[] = (oldBranch instanceof BinaryOp) ? COMPARISONS : [...ACCESSORS, ...PREDICATES];
-        const idx = opTypes.indexOf(oldBranch.constructor);
-        Op = chooseOne([...opTypes.slice(0, idx), ...opTypes.slice(idx + 1)])!;
-    }
+    const opTypes: (typeof Expression)[] = oldBranch instanceof BinaryOp ?
+        BINARY_OPS :
+        UNARY_OPS;
+
+    const idx = opTypes.indexOf(oldBranch.constructor);
+    const Op = chooseOne([...opTypes.slice(0, idx), ...opTypes.slice(idx + 1)])!;
 
     const newBranch = new (Op as any)(oldBranch.children);
     if (oldBranch.parent) {
@@ -125,14 +118,14 @@ export function pruneBranchOrDeleteLeaf(bexpr: Expression) {
     }
 }
 
-export function mutate2(expr: Expression): Expression {
+export function mutate2(bexpr: Expression) {
     return chooseOne([
-            alternateLeaf,
-            alternateOperator,
-            growOrSplitLeaf,
-            pruneBranchOrDeleteLeaf
+        alternateLeaf,
+        alternateOperator,
+        growOrSplitLeaf,
+        pruneBranchOrDeleteLeaf
         ]
-    )!(expr);
+    )!(bexpr);
 }
 
 export function mutate1(expr: Expression) {
