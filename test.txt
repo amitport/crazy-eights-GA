@@ -33,3 +33,22 @@ Generation 300
 stats.maximum 0.9905
 maximum tree size 49
 Best entity (size = 19): (((cardToPlay.rank ≠ discardPile.rank) = isEmpty(discardPile)) ∨ ((8 = cardToPlay.rank) ∨ (cardToPlay.suit = discardPile.suit)))
+
+things that don't work
+stop boolean operations on clauses level
+force one variable per comparison
+
+illegal value (discardPile.suit?)
+¬((¬((8 = cardToPlay.rank)) ∧ (((discardPile.rank ≠ cardToPlay.rank) ∧ (discardPile.suit ≠ cardToPlay.suit)) ∧ discardPile.suit)))
+
+with low penalty for size:
+Generation 240
+stats.maximum 0.999975
+maximum tree size 51
+Best entity (size = 25): ((discardPile ∧ ¬((cardToPlay.rank ≠ 8))) ∨ ((¬(discardPile.suit) = (discardPile.rank ≠ cardToPlay.rank)) ∨ ¬(¬((cardToPlay.suit = discardPile.suit)))))
+
+
+Best entity (size = 19): ((((cardToPlay.rank ≠ discardPile.rank) ≠ (cardToPlay.rank ≠ 8)) ∨ isEmpty(discardPile)) ∨ (discardPile.suit = cardToPlay.suit))
+
+
+(¬(isNotEmpty(discardPile))

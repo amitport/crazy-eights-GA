@@ -47,7 +47,7 @@ export class Variable extends Terminal {
 }
 
 // accessors
-abstract class AccessorOp extends UnaryOp {
+export abstract class AccessorOp extends UnaryOp {
     static readonly type = 'PropertyOp';
 
     static readonly opName: string;

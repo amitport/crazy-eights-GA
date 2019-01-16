@@ -1,10 +1,9 @@
 import {ColorOp, EqOp, IsEmptyOp, IsNotEmptyOp, Literal, NotEqOp, RankOp, SuitOp, Variable} from "./clause";
-import {BinaryOp} from "./expression";
 import {RANKS, SUITS} from "./cards";
 import {AndOp, NotOp, OrOp} from "./boolean-expression";
 
-export const UNARY_OPS = [IsEmptyOp, /* IsNotEmptyOp ,*/ RankOp, SuitOp, ColorOp, NotOp];
-export const BINARY_OPS: typeof BinaryOp[] = [EqOp, NotEqOp, AndOp, OrOp];
+export const UNARY_OPS = [IsEmptyOp, IsNotEmptyOp , RankOp, SuitOp, ColorOp, NotOp];
+export const BINARY_OPS = [EqOp, NotEqOp, AndOp, OrOp];
 
 export const VARIABLES = [new Variable('discardPile'), new Variable('cardToPlay')];
 

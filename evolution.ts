@@ -4,24 +4,29 @@ import * as Genetic from "genetic-js-no-ww";
 
 import {mutate1, mutate2} from "./mutate";
 import {fitness1, fitness2} from "./fitness";
-import {genSamplesArray, getRandomExpression1, getRandomExpression2} from "./random";
+import {genSamplesArray, getRandomExpression} from "./random";
 import {crossover} from "./crossover";
 
 const param1 = {
-    seed: getRandomExpression1,
+    seed: getRandomExpression,
     mutate: mutate1,
     crossover: crossover,
     fitness: fitness1,
 };
 
 const param2 = {
-    seed: getRandomExpression2,
+    seed: getRandomExpression,
     mutate: mutate2,
     crossover: crossover,
     fitness: fitness2,
 };
 
-const param = param1;
+const param = {
+    seed: getRandomExpression,
+    mutate: mutate2,
+    crossover: crossover,
+    fitness: fitness1,
+};
 
 function evolve() {
     const genetic = Genetic.create();

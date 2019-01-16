@@ -1,6 +1,6 @@
 // @ts-ignore
 import histogram from "ascii-histogram";
-import {getRandomExpression2, randomClause} from "./random";
+import {getRandomExpression, randomClause} from "./random";
 import {EqOp, IsEmptyOp, Literal, RankOp, SuitOp, Variable} from "./clause";
 import {EIGHT} from "./cards";
 import {OrOp} from "./boolean-expression";
@@ -60,7 +60,7 @@ function expressionSizeHistogram() {
     // used to view how the histogram of the tree size looks
     const obj: { [key: number]: number } = {};
     for (let i = 0; i < 1000; i++) {
-        const t = getRandomExpression2();
+        const t = getRandomExpression();
         const s = t.size;
         if (obj.hasOwnProperty(s)) {
             obj[s]++;

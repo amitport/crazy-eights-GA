@@ -35,5 +35,5 @@ export function switchSubTrees(tree1: Expression, tree2: Expression) {
 }
 
 export function crossover(parent1: Expression, parent2: Expression) {
-    return switchSubTrees(parent1.clone().getRandomSubExpression(), parent2.clone().getRandomSubExpression());
+    return switchSubTrees(parent1.clone().findRandomSubExpression(), parent2.clone().findRandomSubExpression());
 }

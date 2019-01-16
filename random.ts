@@ -10,7 +10,7 @@ import {
     UNARY_OPS,
     VARIABLES
 } from "./node-types";
-import {Literal} from "./clause";
+import {NotOp} from "./boolean-expression";
 
 export function chooseOne<T>(a: T[] | ReadonlyArray<T>): T | undefined {
     if (a.length !== 0) {
@@ -33,46 +33,38 @@ export function randomClause(): Expression {
     }
 }
 
-export function getRandomExpression1(depth = 0): Expression | undefined {
-    if (Math.random() < 0.08 * (1 + depth / 5000)) {
-        return chooseOne(TERMINALS)!;
-    } else {
-        const node = chooseOne([...UNARY_OPS,  ...BINARY_OPS])!;
-        const nextDepth = depth + 1;
-        if (node.type === 'UnaryOp') {
-            // @ts-ignore
-            if (node.opName === 'isEmpty') {
-                return new node([VARIABLES[0]]);
-            }
-            return new node([getRandomExpression1(nextDepth)!]);
-        }
-        if (node.type === 'PropertyOp') {
-            return new node([chooseOne(VARIABLES)!]);
-        }
-        if (node.type === 'BinaryOp') {
-            return new (node as any)([getRandomExpression1(nextDepth), getRandomExpression1(nextDepth)]);
-        }
-    }
-}
-
-export function getRandomExpression2(depth = 0): Expression {
-    if (Math.random() < 0.15 * (1 + depth / 10)) {
-        // clauses are literals as far as the boolean expression is concerned
-        return new Literal(randomClause());
-    } else {
-        const Op = chooseOne(BOOLEAN_OPS)!;
-        const nextDepth = depth + 1;
-        if (Op.arity === 1) {
-            return new Op([getRandomExpression2(nextDepth)]);
-        } else { // if (Op.arity === 2)
-            return new Op([getRandomExpression2(nextDepth), getRandomExpression2(nextDepth)]);
-        }
-    }
+function chooseTerminal(depth: number) {
+    // return Math.random() < 0.08 * (1 + depth / 5000);
+    return Math.random() < 0.15 * (1 + depth / 10);
 }
 
 export function getRandomTerminal() {
     return chooseOne(TERMINALS)!;
     // return new Literal(randomClause());
+    // return randomClause();
+}
+
+function randomExpressionRec(depth: number) {
+    // const Op = chooseOne([...UNARY_OPS,  ...BINARY_OPS])!;
+    const Op = chooseOne(BOOLEAN_OPS)!;
+    const nextDepth = depth + 1;
+
+    if (Op.arity === 1) {
+        // if (Op !== NotOp) {
+        //     return new Op([chooseOne(VARIABLES)!]);
+        // }
+        return new Op([getRandomExpression(nextDepth)]);
+    } else { // if (Op.arity === 2)
+        return new Op([getRandomExpression(nextDepth), getRandomExpression(nextDepth)]);
+    }
+}
+
+export function getRandomExpression(depth = 0): Expression {
+    if (chooseTerminal(depth)) {
+        return randomClause(); //return getRandomTerminal();
+    } else {
+        return randomExpressionRec(depth);
+    }
 }
 
 function randomSample() {

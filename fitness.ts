@@ -30,12 +30,12 @@ export function fitness2(this: any, entity: Expression, samples = this.userData.
     }
 
     score /= samples.length;
-    if (score < 0) {
+    if (score < 0.05) {
         score = (-score) - 0.05 // fine for being in the opposite direction (can easily be reversed with NotOp)
     }
-    score -= entity.size * 0.000001; // fine for being too big
-    // if (score > 1) {
-    //     debugger;
-    // }
+    score -= entity.size * 0.0001; // fine for being too big
+    if (score > 1) {
+        debugger;
+    }
     return score;
 }

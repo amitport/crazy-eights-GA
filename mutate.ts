@@ -1,90 +1,82 @@
-import {BinaryOp, Expression, UnaryOp} from "./expression";
+import {BinaryOp, Expression, Terminal, UnaryOp} from "./expression";
 import {Literal} from "./clause";
-import {AndOp, OrOp} from "./boolean-expression";
-import {chooseOne, getRandomExpression1, getRandomExpression2, randomClause} from "./random";
-import {BINARY_OPS, BOOLEAN_OPS} from "./node-types";
+import {chooseOne, getRandomExpression, getRandomTerminal} from "./random";
+import {ACCESSORS, BINARY_OPS, COMPARISONS, PREDICATES, UNARY_OPS} from "./node-types";
+import {AndOp, NotOp, OrOp} from "./boolean-expression";
 
-export function chooseBranch(bexpr: Expression): Expression {
-    let branch;
-    do {
-        branch = bexpr.getRandomSubExpression();
-    } while (branch instanceof Literal);
-    return branch;
-}
-
-
-export function chooseRandomLeaf(bexpr: Expression): Literal {
-    do {
-        bexpr = bexpr.getRandomSubExpression();
-    } while (!(bexpr instanceof Literal));
-    return bexpr;
-}
-
-export function alternateLeaf(bexpr: Expression) {
-    if (bexpr instanceof Literal) {
-        return new Literal(randomClause())
+export function alternateLeaf(expr: Expression) {
+    if (expr instanceof Terminal) {
+        return getRandomTerminal()
     }
 
-    bexpr = bexpr.clone();
+    expr = expr.clone();
 
-    const leaf = chooseRandomLeaf(bexpr);
+    const terminal = expr.findRandomTerminalDescendant();
 
-    const idx = leaf.parent!.children.indexOf(leaf);
-    const newLeaf = new Literal(randomClause());
-    newLeaf.parent = leaf.parent;
-    leaf.parent!.children.splice(idx, 1, newLeaf);
+    const idx = terminal.parent!.children.indexOf(terminal);
+    const newLeaf = getRandomTerminal();
+    newLeaf.parent = terminal.parent;
+    terminal.parent!.children.splice(idx, 1, newLeaf);
 
-    return bexpr;
+    return expr;
 }
 
-export function alternateOperator(bexpr: Expression) {
-    if (bexpr instanceof Literal) {
-        return bexpr;
+export function alternateOperator(expr: Expression): Expression {
+    if (expr instanceof Terminal) {
+        return expr;
+    }
+    expr = expr.clone();
+
+    const oldBranch = expr.findRandomBranchDescendant();
+
+    let Op: typeof Expression;
+    if (oldBranch instanceof AndOp) {
+        Op = OrOp;
+    } else if (oldBranch instanceof OrOp) {
+        Op = AndOp;
+    } else if (oldBranch instanceof NotOp) {
+        // got nothing to replace
+        return mutate2(expr);
+    } else { // ACCESSORS and PREDICATES
+        const opTypes: (typeof Expression)[] = (oldBranch instanceof BinaryOp) ? COMPARISONS : [...ACCESSORS, ...PREDICATES];
+        const idx = opTypes.indexOf(oldBranch.constructor);
+        Op = chooseOne([...opTypes.slice(0, idx), ...opTypes.slice(idx + 1)])!;
     }
 
-    bexpr = bexpr.clone();
-    const branch = chooseBranch(bexpr);
-    let newBranch;
-    if (branch instanceof OrOp) {
-        newBranch = new AndOp(branch.children);
-    } else if (branch instanceof AndOp) {
-        newBranch = new OrOp(branch.children);
-    } else {
-        return bexpr;
-    }
-
-    if (branch.parent) {
-        const idx = branch.parent.children.indexOf(branch);
-        branch.parent.children.splice(idx, 1, newBranch);
-
-        return bexpr;
+    const newBranch = new (Op as any)(oldBranch.children);
+    if (oldBranch.parent) {
+        newBranch.parent = oldBranch.parent;
+        const idx = oldBranch.parent.children.indexOf(oldBranch);
+        oldBranch.parent.children.splice(idx, 1, newBranch);
+        return expr;
     } else {
         return newBranch;
     }
 }
 
 export function growOrSplitLeaf(bexpr: Expression) {
-    if (bexpr instanceof Literal) {
+    if (bexpr instanceof Terminal) {
         return bexpr;
     }
 
     bexpr = bexpr.clone();
-    const subTree = bexpr.getRandomSubExpression();
-    const Op = chooseOne(BOOLEAN_OPS)!;
+    const subTree = bexpr.findRandomSubExpression();
+    const Op = chooseOne([...BINARY_OPS, ...UNARY_OPS])!;
 
     let newBranch;
     let parent: Expression | undefined = subTree.parent;
-    if (Op.arity === 1) {
-        newBranch = new Op([subTree]);
-    } else { // if (Op.arity === 2)
+
+    if (Op.arity === 2) {
         const children = [subTree];
-        const randomChild = getRandomExpression2(bexpr.size);
+        const randomChild = getRandomExpression(10 /* give more chance to terminals */);
         if (Math.random() < 0.5) {
             children.push(randomChild);
         } else {
             children.unshift(randomChild);
         }
         newBranch = new Op(children);
+    } else { // if (Op.arity === 1)
+        newBranch = new Op([subTree]);
     }
 
     if (parent) {
@@ -106,12 +98,12 @@ export function growOrSplitLeaf(bexpr: Expression) {
 }
 
 export function pruneBranchOrDeleteLeaf(bexpr: Expression) {
-    if (bexpr instanceof Literal) {
+    if (bexpr instanceof Terminal) {
         return bexpr;
     }
 
     bexpr = bexpr.clone();
-    const branch = chooseBranch(bexpr);
+    const branch = bexpr.findRandomBranchDescendant();
     const child = chooseOne(branch.children)!;
 
     if (branch.parent) {
@@ -133,19 +125,19 @@ export function pruneBranchOrDeleteLeaf(bexpr: Expression) {
     }
 }
 
-export function mutate2(bexpr: Expression) {
+export function mutate2(expr: Expression): Expression {
     return chooseOne([
-        alternateLeaf,
-        alternateOperator,
-        growOrSplitLeaf,
-        pruneBranchOrDeleteLeaf
+            alternateLeaf,
+            alternateOperator,
+            growOrSplitLeaf,
+            pruneBranchOrDeleteLeaf
         ]
-    )!(bexpr);
+    )!(expr);
 }
 
 export function mutate1(expr: Expression) {
     const newEntity = expr.clone();
-    const oldBranch = expr.getRandomSubExpression();
+    const oldBranch = expr.findRandomSubExpression();
 
     if (Math.random() < 0.05 && oldBranch instanceof UnaryOp) {
         if (oldBranch.parent) {
@@ -183,7 +175,7 @@ export function mutate1(expr: Expression) {
             }
         }
         // replace with another binary op
-        const idx = BINARY_OPS.indexOf(oldBranch.constructor as any as typeof BinaryOp);
+        const idx = BINARY_OPS.indexOf(oldBranch.constructor as any);
         const Op = chooseOne([...BINARY_OPS.slice(0, idx), ...BINARY_OPS.slice(idx + 1)])!;
 
         const newOp = new (Op as any)(oldBranch.children);
@@ -196,7 +188,7 @@ export function mutate1(expr: Expression) {
         }
     }
 
-    const newBranch = getRandomExpression1(10 /* give more chance to terminals */)!;
+    const newBranch = getRandomExpression(10 /* give more chance to terminals */)!;
 
     const parent = oldBranch.parent;
     newBranch.parent = parent;

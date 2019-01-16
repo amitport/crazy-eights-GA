@@ -1,3 +1,5 @@
+import {Literal} from "./clause";
+
 export abstract class Expression {
     static arity: number;
 
@@ -54,12 +56,28 @@ export abstract class Expression {
         }
     }
 
-    getRandomSubExpression(): any {
+    findRandomSubExpression(): any {
         return this.getSubExpressionAtIndex(Math.floor(Math.random() * this.size));
+    }
+
+    findRandomTerminalDescendant(): Terminal {
+        let bexpr = this;
+        do {
+            bexpr = bexpr.findRandomSubExpression();
+        } while (!(bexpr instanceof Terminal));
+        return bexpr;
+    }
+
+    findRandomBranchDescendant(): Expression {
+        let branch = this;
+        do {
+            branch = this.findRandomSubExpression();
+        } while (branch instanceof Terminal);
+        return branch;
     }
 }
 
-abstract class Op extends Expression {
+export abstract class Op extends Expression {
     protected static opName: string;
     ['constructor']: typeof Op;
 }
