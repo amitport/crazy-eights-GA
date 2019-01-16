@@ -1,37 +1,21 @@
-import {Expression} from "./expression";
-import {Literal, randomClause} from "./clause";
-import {chooseOne} from "./utils";
-import {AndOp, BOOLEAN_OPS, OrOp, randomBooleanExpression} from "./boolean-expression";
-
-export function getSubTreeAtIndex(bexpr: Expression, index: number): any {
-    if (index === bexpr.size - 1) {
-        return bexpr;
-    }
-    let accSize = 0;
-    for (const child of bexpr.children) {
-        if (index < accSize + child.size) {
-            return getSubTreeAtIndex(child, index - accSize);
-        }
-        accSize += child.size;
-    }
-}
+import {BinaryOp, Expression, UnaryOp} from "./expression";
+import {Literal} from "./clause";
+import {AndOp, OrOp} from "./boolean-expression";
+import {chooseOne, getRandomExpression1, getRandomExpression2, randomClause} from "./random";
+import {BINARY_OPS, BOOLEAN_OPS} from "./node-types";
 
 export function chooseBranch(bexpr: Expression): Expression {
     let branch;
     do {
-        branch = getSubTreeAtIndex(bexpr, Math.floor(Math.random() * bexpr.size));
+        branch = bexpr.getRandomSubExpression();
     } while (branch instanceof Literal);
     return branch;
-}
-
-export function chooseRandomSubtree(bexpr: Expression): Expression {
-    return getSubTreeAtIndex(bexpr, Math.floor(Math.random() * bexpr.size));
 }
 
 
 export function chooseRandomLeaf(bexpr: Expression): Literal {
     do {
-        bexpr = getSubTreeAtIndex(bexpr, Math.floor(Math.random() * bexpr.size));
+        bexpr = bexpr.getRandomSubExpression();
     } while (!(bexpr instanceof Literal));
     return bexpr;
 }
@@ -85,7 +69,7 @@ export function growOrSplitLeaf(bexpr: Expression) {
     }
 
     bexpr = bexpr.clone();
-    const subTree = chooseRandomSubtree(bexpr);
+    const subTree = bexpr.getRandomSubExpression();
     const Op = chooseOne(BOOLEAN_OPS)!;
 
     let newBranch;
@@ -94,7 +78,7 @@ export function growOrSplitLeaf(bexpr: Expression) {
         newBranch = new Op([subTree]);
     } else { // if (Op.arity === 2)
         const children = [subTree];
-        const randomChild = randomBooleanExpression(bexpr.size);
+        const randomChild = getRandomExpression2(bexpr.size);
         if (Math.random() < 0.5) {
             children.push(randomChild);
         } else {
@@ -149,7 +133,7 @@ export function pruneBranchOrDeleteLeaf(bexpr: Expression) {
     }
 }
 
-export function mutate(bexpr: Expression) {
+export function mutate2(bexpr: Expression) {
     return chooseOne([
         alternateLeaf,
         alternateOperator,
@@ -159,39 +143,75 @@ export function mutate(bexpr: Expression) {
     )!(bexpr);
 }
 
-export function replaceBranch(oldParent: any, oldBranch: any, newBranch: any) {
-    let sizeDelta;
-    newBranch.parent = oldParent;
+export function mutate1(expr: Expression) {
+    const newEntity = expr.clone();
+    const oldBranch = expr.getRandomSubExpression();
 
-    if (newBranch.size >= 100 && oldParent) {
-        // just prune when other branch is too big
-        oldParent.children.splice(oldParent.children.indexOf(oldBranch), 1, new Literal(randomClause()));
+    if (Math.random() < 0.05 && oldBranch instanceof UnaryOp) {
+        if (oldBranch.parent) {
+            oldBranch.parent.children.splice(oldBranch.parent.children.indexOf(oldBranch), 1, oldBranch.children[0]);
 
-        sizeDelta = 1 - oldBranch.size;
-    } else {
+            oldBranch.children[0].parent = oldBranch.parent;
 
-        if (oldParent) {
-            // replace the children of the old parent
-            oldParent.children.splice(oldParent.children.indexOf(oldBranch), 1, newBranch);
+            let newRoot = oldBranch as Expression;
+            while (newRoot.parent) {
+                newRoot = newRoot.parent as Expression;
+                newRoot.size -= 1;
+            }
+            return newRoot;
+        } else {
+            oldBranch.children[0]
         }
-        sizeDelta = newBranch.size - oldBranch.size;
-        // propagate size change and find root;
     }
+    if (Math.random() < 0.2 && oldBranch instanceof BinaryOp) {
+        if (Math.random() < 0.3) {
+            // replace with one of the children
+            const newChild = chooseOne(oldBranch.children)!;
+            if (oldBranch.parent) {
+                newChild.parent = oldBranch.parent;
+
+                oldBranch.parent.children.splice(oldBranch.parent.children.indexOf(oldBranch), 1, newChild);
+                const sizeDelta = newChild.size - oldBranch.size;
+                let newRoot = oldBranch as Expression;
+                while (newRoot.parent) {
+                    newRoot = newRoot.parent as Expression;
+                    newRoot.size += sizeDelta;
+                }
+                return newEntity;
+            } else {
+                return newChild;
+            }
+        }
+        // replace with another binary op
+        const idx = BINARY_OPS.indexOf(oldBranch.constructor as any as typeof BinaryOp);
+        const Op = chooseOne([...BINARY_OPS.slice(0, idx), ...BINARY_OPS.slice(idx + 1)])!;
+
+        const newOp = new (Op as any)(oldBranch.children);
+        if (oldBranch.parent) {
+            newOp.parent = oldBranch.parent;
+            oldBranch.parent.children.splice(oldBranch.parent.children.indexOf(oldBranch), 1, newOp);
+            return newEntity;
+        } else {
+            return newOp;
+        }
+    }
+
+    const newBranch = getRandomExpression1(10 /* give more chance to terminals */)!;
+
+    const parent = oldBranch.parent;
+    newBranch.parent = parent;
+
+    if (parent) {
+        // replace the children of the old parent
+        parent.children.splice(parent.children.indexOf(oldBranch), 1, newBranch);
+    }
+
+    // propagate size change and find root;
+    const sizeDelta = newBranch.size - oldBranch.size;
     let newRoot = newBranch;
     while (newRoot.parent) {
-        newRoot = newRoot.parent;
+        newRoot = newRoot.parent as Expression;
         newRoot.size += sizeDelta;
     }
     return newRoot;
-}
-
-export function switchSubTrees(tree1: Expression, tree2: Expression) {
-    const parent1 = tree1.parent;
-    const parent2 = tree2.parent;
-
-    return [replaceBranch(parent1, tree1, tree2), replaceBranch(parent2, tree2, tree1)];
-}
-
-export function crossover(parent1: Expression, parent2: Expression) {
-    return switchSubTrees(chooseRandomSubtree(parent1.clone()), chooseRandomSubtree(parent2.clone()));
 }

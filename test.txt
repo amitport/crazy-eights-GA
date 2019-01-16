@@ -1,0 +1,35 @@
+pitfall :
+
+generation 1000
+
+((EIGHT == cardToPlay.rank) != (((cardToPlay.suit == discardPile.suit) and discardPile) or isEmpty(((discardPile.rank == cardToPlay.rank) or discardPile).suit)))
+!((((discardPile.rank != cardToPlay.rank) and (discardPile.suit != cardToPlay.suit)) and discardPile.suit))
+
+score (for 999/1000)
+
+
+Generation 545 (with population 1000)
+stats.maximum 1
+maximum tree size 112
+Best entity (size = 20): !((((discardPile.rank != cardToPlay.rank) and ((EIGHT != cardToPlay.rank) and (discardPile.suit != cardToPlay.suit))) and discardPile.color)
+
+
+Generation 1360
+stats.maximum 0.9905
+maximum tree size 46
+Best entity (size = 19): ((EIGHT == cardToPlay.rank) or ((discardPile.rank == cardToPlay.rank) or ((cardToPlay.suit == discardPile.suit) or isEmpty(discardPile))))
+
+Generation 60
+stats.maximum 0.9315
+maximum tree size 72
+Best entity (size = 17): (((cardToPlay.rank ≠ discardPile.rank) = (discardPile.suit = discardPile.color)) ∨ (cardToPlay.suit = discardPile.suit))
+
+Generation 100
+stats.maximum 0.9775
+maximum tree size 123
+Best entity (size = 45): (((cardToPlay.rank ≠ discardPile.rank) = (isEmpty((isEmpty(discardPile) = ¬(discardPile.rank))).suit = discardPile)) ∨ ((((8 = cardToPlay.rank) ∨ (((cardToPlay.rank = cardToPlay.suit) = cardToPlay.rank) ∨ (cardToPlay.suit = discardPile.suit))) = ¬(discardPile.suit)) = (false = discardPile.suit)))
+
+Generation 300
+stats.maximum 0.9905
+maximum tree size 49
+Best entity (size = 19): (((cardToPlay.rank ≠ discardPile.rank) = isEmpty(discardPile)) ∨ ((8 = cardToPlay.rank) ∨ (cardToPlay.suit = discardPile.suit)))
