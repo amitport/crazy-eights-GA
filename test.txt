@@ -52,3 +52,17 @@ Best entity (size = 19): ((((cardToPlay.rank ≠ discardPile.rank) ≠ (cardToPl
 
 
 (¬(isNotEmpty(discardPile))
+
+
+
+with over-selection ... don't seem to be very different from tournament
+Generation 300
+stats.maximum 0.9905
+maximum tree size 39
+Best entity (size = 19): (((cardToPlay.rank = discardPile.rank) ∨ (cardToPlay.rank = 8)) ∨ ((cardToPlay.suit = discardPile.suit) ∨ isEmpty(discardPile)))
+
+avoid mutation after crossover 1
+Generation 360
+stats.maximum 0.9905
+maximum tree size 28
+Best entity (size = 19): ((((discardPile.suit = cardToPlay.suit) ∨ isEmpty(discardPile)) ∨ (discardPile.rank = cardToPlay.rank)) ∨ (8 = cardToPlay.rank))

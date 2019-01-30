@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "ascii-histogram": "^1.2.1",
+    "csv-write-stream": "^2.0.0",
     "genetic-js-no-ww": "github:amitport/genetic-js-no-ww"
   }
 }
