@@ -75,7 +75,7 @@ function evolve(writeToCsv: boolean = false) {
         size: 1000,
         crossover: 0.3,
         mutation: 0.3, // doesn't appl after our change to GP
-        skip: writeToCsv ? undefined : 20, /* frequency for notifications */
+        skip: writeToCsv ? 0 : 20, /* frequency for notifications */
     }, {
         samples: genSamplesArray(1000),
     });
